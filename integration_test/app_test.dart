@@ -1,30 +1,52 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
+import 'package:flutter_basics/components/bottom_nav_bar.dart';
+import 'package:flutter_basics/screens/activation_screen.dart';
+import 'package:flutter_basics/screens/engineer_list_screen.dart';
+import 'package:flutter_basics/screens/factory_dashboard.dart';
+import 'package:flutter_basics/screens/notification_settings_screen.dart';
+import 'package:flutter_basics/screens/otp_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_basics/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('App Integration Test', (WidgetTester tester) async {
+    // Pump the app
     await tester.pumpWidget(MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify the initial route is the ActivationScreen
+    expect(find.byType(ActivationScreen), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Enter a mobile number and accept the terms
+    await tester.tap(find.byType(Checkbox));
+    await tester.tap(find.text('Get Activation Code'));
+    await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify the OTPScreen is displayed
+    expect(find.byType(OTPScreen), findsOneWidget);
+
+    // Enter the OTP and verify the FactoryDashboard is displayed
+    await tester.enterText(find.byType(TextField), '123456');
+    await tester.tap(find.text('Verify'));
+    await tester.pumpAndSettle();
+    expect(find.byType(FactoryDashboard), findsOneWidget);
+
+    // Verify the bottom navigation bar is displayed
+    expect(find.byType(BottomNavBar), findsOneWidget);
+
+    // Tap the "Engineer List" button and verify the EngineerListScreen is displayed
+    await tester.tap(find.byIcon(Icons.person));
+    await tester.pumpAndSettle();
+    expect(find.byType(EngineerListScreen), findsOneWidget);
+
+    // Tap the "Factory" button and verify the FactoryDashboard is displayed
+    await tester.tap(find.byIcon(Icons.factory));
+    await tester.pumpAndSettle();
+    expect(find.byType(FactoryDashboard), findsOneWidget);
+
+    // Tap the "Settings" button and verify the NotificationSettingsScreen is displayed
+    await tester.tap(find.byIcon(Icons.settings));
+    await tester.pumpAndSettle();
+    expect(find.byType(NotificationSettingsScreen), findsOneWidget);
   });
 }
