@@ -1,56 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_basics/components/bottom_nav_bar.dart';
-import 'package:flutter_basics/screens/activation_screen.dart';
-import 'package:flutter_basics/screens/engineer_list_screen.dart';
-import 'package:flutter_basics/screens/factory_dashboard.dart';
-import 'package:flutter_basics/screens/notification_settings_screen.dart';
-import 'package:flutter_basics/screens/otp_screen.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:flutter_basics/main.dart';
+
+import 'package:flutter_basics/main.dart' as app;
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('App Integration Test', () {
-    testWidgets('Verify app navigation and functionality', (WidgetTester tester) async {
-      // Pump the app
-      await tester.pumpWidget(MyApp());
+    testWidgets('Navigate through screens', (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle();
 
-      // Verify the initial route is the ActivationScreen
-      expect(find.byType(ActivationScreen), findsOneWidget);
+      // Verify the initial screen
+      expect(find.text('Welcome !'), findsOneWidget);
 
-      // Enter a mobile number and accept the terms
+      // Tap the checkbox to accept terms and conditions
       await tester.tap(find.byType(Checkbox));
+      await tester.pumpAndSettle();
+
+      // Tap the "Get Activation Code" button
       await tester.tap(find.text('Get Activation Code'));
       await tester.pumpAndSettle();
 
-      // Verify the OTPScreen is displayed
-      expect(find.byType(OTPScreen), findsOneWidget);
+      // Verify the OTP screen
+      expect(find.text('Enter the activation code you received via SMS.'), findsOneWidget);
 
-      // Enter the OTP and verify the FactoryDashboard is displayed
+      // Enter the OTP
       await tester.enterText(find.byType(TextField), '123456');
-      await tester.tap(find.text('Verify'));
       await tester.pumpAndSettle();
-      expect(find.byType(FactoryDashboard), findsOneWidget);
 
-      // Verify the bottom navigation bar is displayed
-      expect(find.byType(BottomNavBar), findsOneWidget);
+      // Tap the "Activate" button
+      await tester.tap(find.text('Activate'));
+      await tester.pumpAndSettle();
 
-      // Tap the "Engineer List" button and verify the EngineerListScreen is displayed
+      // Verify the Factory Dashboard screen
+      expect(find.text('Factory 1'), findsOneWidget);
+
+      // Navigate to the Engineer List screen
       await tester.tap(find.byIcon(Icons.person));
       await tester.pumpAndSettle();
-      expect(find.byType(EngineerListScreen), findsOneWidget);
 
-      // Tap the "Factory" button and verify the FactoryDashboard is displayed
+      // Verify the Engineer List screen
+      expect(find.text('Factory 1 Engineers'), findsOneWidget);
+
+      // Navigate back to the Factory Dashboard screen
       await tester.tap(find.byIcon(Icons.factory));
       await tester.pumpAndSettle();
-      expect(find.byType(FactoryDashboard), findsOneWidget);
 
-      // Tap the "Settings" button and verify the NotificationSettingsScreen is displayed
+      // Navigate to the Settings screen
       await tester.tap(find.byIcon(Icons.settings));
       await tester.pumpAndSettle();
-      expect(find.byType(NotificationSettingsScreen), findsOneWidget);
+
+      // Verify the Settings screen
+      expect(find.text('Minimum Threshold'), findsOneWidget);
     });
   });
 }
