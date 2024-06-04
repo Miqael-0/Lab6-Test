@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
 import 'package:flutter_basics/main.dart' as app;
+import 'package:flutter_basics/components/bottom_nav_bar.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -38,18 +39,24 @@ void main() {
       expect(find.widgetWithText(AppBar, 'Factory 1'), findsOneWidget);
 
       // Navigate to the Engineer List screen
-      await tester.tap(find.byIcon(Icons.person));
+      await tester.tap(find.byWidgetPredicate((widget) =>
+      widget is BottomNavBar &&
+          widget.currentIndex == 1));
       await tester.pumpAndSettle();
 
       // Verify the Engineer List screen
-      expect(find.text('Factory 1 Engineers'), findsOneWidget);
+      expect(find.widgetWithText(AppBar, 'Factory 1 Engineers'), findsOneWidget);
 
       // Navigate back to the Factory Dashboard screen
-      await tester.tap(find.byIcon(Icons.factory));
+      await tester.tap(find.byWidgetPredicate((widget) =>
+      widget is BottomNavBar &&
+          widget.currentIndex == 0));
       await tester.pumpAndSettle();
 
       // Navigate to the Settings screen
-      await tester.tap(find.byIcon(Icons.settings));
+      await tester.tap(find.byWidgetPredicate((widget) =>
+      widget is BottomNavBar &&
+          widget.currentIndex == 2));
       await tester.pumpAndSettle();
 
       // Verify the Settings screen
