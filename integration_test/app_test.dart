@@ -35,7 +35,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify the Factory Dashboard screen
-      expect(find.text('Factory 1'), findsOneWidget);
+      expect(find.widgetWithText(AppBar, 'Factory 1'), findsOneWidget);
 
       // Navigate to the Engineer List screen
       await tester.tap(find.byIcon(Icons.person));
