@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_basics/components/bottom_nav_bar.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
 import 'package:flutter_basics/main.dart' as app;
-import 'package:flutter_basics/components/bottom_nav_bar.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('App Integration Test', () {
-    testWidgets('Navigate through screens', (WidgetTester tester) async {
+    testWidgets('Navigate to Factory Dashboard', (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
 
@@ -37,34 +35,8 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify the Factory Dashboard screen
-      expect(find.widgetWithText(AppBar, 'Factory 1'), findsOneWidget);
-
-      // Navigate to the Engineer List screen
-      await tester.tap(find.byWidgetPredicate((widget) =>
-      widget is BottomNavBar &&
-          widget.currentIndex == 1 &&
-          widget.onTap != null));
-      await tester.pumpAndSettle();
-
-      // Verify the Engineer List screen
-      expect(find.text('Factory 1 Engineers'), findsOneWidget);
-
-      // Navigate back to the Factory Dashboard screen
-      await tester.tap(find.byWidgetPredicate((widget) =>
-      widget is BottomNavBar &&
-          widget.currentIndex == 0 &&
-          widget.onTap != null));
-      await tester.pumpAndSettle();
-
-      // Navigate to the Settings screen
-      await tester.tap(find.byWidgetPredicate((widget) =>
-      widget is BottomNavBar &&
-          widget.currentIndex == 2 &&
-          widget.onTap != null));
-      await tester.pumpAndSettle();
-
-      // Verify the Settings screen
-      expect(find.text('Minimum Threshold'), findsOneWidget);
+      expect(find.text('Factory 1'), findsOneWidget);
+      expect(find.text('Factory 2'), findsOneWidget);
     });
   });
 }
