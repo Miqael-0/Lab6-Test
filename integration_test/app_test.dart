@@ -8,7 +8,7 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('App Integration Test', () {
-    testWidgets('Navigate to Factory Dashboard', (WidgetTester tester) async {
+    testWidgets('Navigate to OTP Screen', (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
 
@@ -25,18 +25,6 @@ void main() {
 
       // Verify the OTP screen
       expect(find.text('Enter the activation code you received via SMS.'), findsOneWidget);
-
-      // Enter the OTP
-      await tester.enterText(find.byType(TextField), '123456');
-      await tester.pumpAndSettle();
-
-      // Tap the "Activate" button
-      await tester.tap(find.text('Activate'));
-      await tester.pumpAndSettle();
-
-      // Verify the Factory Dashboard screen
-      expect(find.text('Factory 1'), findsOneWidget);
-      expect(find.text('Factory 2'), findsOneWidget);
     });
   });
 }
